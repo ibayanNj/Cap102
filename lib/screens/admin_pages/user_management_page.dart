@@ -217,142 +217,252 @@ class _AdminUserManagementPageState extends State<AdminUserManagementPage> {
 
   @override
   Widget build(BuildContext context) {
+    final screenWidth = MediaQuery.of(context).size.width;
+    final isMobile = screenWidth < 600; // adjust breakpoint as needed
+
     return Padding(
       padding: const EdgeInsets.all(20.0),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          return Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
             children: [
-              const Text(
-                'User Management',
-                style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-              ),
-              Row(
-                children: [
-                  ElevatedButton.icon(
-                    onPressed: () => _showUserDialog(),
-                    icon: const Icon(Icons.add),
-                    label: const Text('Add User'),
-                  ),
-                  const SizedBox(width: 10),
-                  IconButton(
-                    icon: const Icon(Icons.refresh),
-                    onPressed: _fetchUsers,
-                  ),
-                ],
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          _buildUserStatCard(
-            'Total Users',
-            '${_users.length}',
-            Icons.people,
-            Colors.blue,
-          ),
-          const SizedBox(height: 20),
-          // Search and Filter Bar
-          Row(
-            children: [
-              Expanded(
-                child: TextField(
-                  controller: _searchController,
-                  decoration: InputDecoration(
-                    hintText: 'Search users...',
-                    prefixIcon: const Icon(Icons.search),
-                    border: OutlineInputBorder(
-                      borderRadius: BorderRadius.circular(8),
-                    ),
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              DropdownButton<String>(
-                value: _selectedRole,
-                items: const [
-                  DropdownMenuItem(
-                    value: 'All Roles',
-                    child: Text('All Roles'),
-                  ),
-                  DropdownMenuItem(value: 'Dean', child: Text('Dean')),
-                  DropdownMenuItem(value: 'Faculty', child: Text('Faculty')),
-                  DropdownMenuItem(value: 'Admin', child: Text('Admin')),
-                ],
-                onChanged: (value) {
-                  setState(() => _selectedRole = value!);
-                  _filterUsers();
-                },
-              ),
-            ],
-          ),
-          const SizedBox(height: 20),
-          Expanded(
-            child: Card(
-              child: _isLoading
-                  ? const Center(child: CircularProgressIndicator())
-                  : _filteredUsers.isEmpty
-                  ? const Center(child: Text('No users found'))
-                  : SingleChildScrollView(
-                      scrollDirection: Axis.horizontal,
-                      child: SingleChildScrollView(
-                        child: Padding(
-                          padding: const EdgeInsets.all(16.0),
-                          child: DataTable(
-                            headingRowColor: WidgetStateProperty.all(
-                              Colors.grey[100],
-                            ),
-                            columns: const [
-                              DataColumn(label: Text('Name')),
-                              DataColumn(label: Text('Role')),
-                              DataColumn(label: Text('Actions')),
-                            ],
-                            rows: _filteredUsers.map((user) {
-                              return DataRow(
-                                cells: [
-                                  DataCell(Text(user.name)),
-                                  DataCell(
-                                    Chip(
-                                      label: Text(user.role),
-                                      backgroundColor: _getRoleColor(user.role),
-                                    ),
-                                  ),
-                                  DataCell(
-                                    Row(
-                                      mainAxisSize: MainAxisSize.min,
-                                      children: [
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.edit,
-                                            size: 20,
-                                          ),
-                                          onPressed: () =>
-                                              _showUserDialog(user: user),
-                                          tooltip: 'Edit',
-                                        ),
-                                        IconButton(
-                                          icon: const Icon(
-                                            Icons.delete,
-                                            size: 20,
-                                            color: Colors.red,
-                                          ),
-                                          onPressed: () => _confirmDelete(user),
-                                          tooltip: 'Delete',
-                                        ),
-                                      ],
-                                    ),
-                                  ),
-                                ],
-                              );
-                            }).toList(),
+              // Header Section
+              isMobile
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        const Text(
+                          'User Management',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
                           ),
                         ),
-                      ),
+                        const SizedBox(height: 10),
+                        Row(
+                          mainAxisAlignment: MainAxisAlignment.start,
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () => _showUserDialog(),
+                              icon: const Icon(Icons.add),
+                              label: const Text('Add User'),
+                            ),
+                            const SizedBox(width: 10),
+                            IconButton(
+                              icon: const Icon(Icons.refresh),
+                              onPressed: _fetchUsers,
+                            ),
+                          ],
+                        ),
+                      ],
+                    )
+                  : Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        const Text(
+                          'User Management',
+                          style: TextStyle(
+                            fontSize: 18,
+                            fontWeight: FontWeight.bold,
+                          ),
+                        ),
+                        Row(
+                          children: [
+                            ElevatedButton.icon(
+                              onPressed: () => _showUserDialog(),
+                              icon: const Icon(Icons.add),
+                              label: const Text('Add User'),
+                            ),
+                            const SizedBox(width: 10),
+                            IconButton(
+                              icon: const Icon(Icons.refresh),
+                              onPressed: _fetchUsers,
+                            ),
+                          ],
+                        ),
+                      ],
                     ),
-            ),
-          ),
-        ],
+
+              const SizedBox(height: 20),
+
+              // User Stat
+              _buildUserStatCard(
+                'Total Users',
+                '${_users.length}',
+                Icons.people,
+                Colors.blue,
+              ),
+
+              const SizedBox(height: 20),
+
+              // Search & Filter
+              isMobile
+                  ? Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        TextField(
+                          controller: _searchController,
+                          decoration: InputDecoration(
+                            hintText: 'Search users...',
+                            prefixIcon: const Icon(Icons.search),
+                            border: OutlineInputBorder(
+                              borderRadius: BorderRadius.circular(8),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        DropdownButton<String>(
+                          value: _selectedRole,
+                          isExpanded: true,
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'All Roles',
+                              child: Text('All Roles'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Dean',
+                              child: Text('Dean'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Faculty',
+                              child: Text('Faculty'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Admin',
+                              child: Text('Admin'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() => _selectedRole = value!);
+                            _filterUsers();
+                          },
+                        ),
+                      ],
+                    )
+                  : Row(
+                      children: [
+                        Expanded(
+                          child: TextField(
+                            controller: _searchController,
+                            decoration: InputDecoration(
+                              hintText: 'Search users...',
+                              prefixIcon: const Icon(Icons.search),
+                              border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8),
+                              ),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(width: 10),
+                        DropdownButton<String>(
+                          value: _selectedRole,
+                          items: const [
+                            DropdownMenuItem(
+                              value: 'All Roles',
+                              child: Text('All Roles'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Dean',
+                              child: Text('Dean'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Faculty',
+                              child: Text('Faculty'),
+                            ),
+                            DropdownMenuItem(
+                              value: 'Admin',
+                              child: Text('Admin'),
+                            ),
+                          ],
+                          onChanged: (value) {
+                            setState(() => _selectedRole = value!);
+                            _filterUsers();
+                          },
+                        ),
+                      ],
+                    ),
+
+              const SizedBox(height: 20),
+
+              // Table Section
+              Expanded(
+                child: Card(
+                  child: _isLoading
+                      ? const Center(child: CircularProgressIndicator())
+                      : _filteredUsers.isEmpty
+                      ? const Center(child: Text('No users found'))
+                      : SingleChildScrollView(
+                          scrollDirection: Axis.horizontal,
+                          child: ConstrainedBox(
+                            constraints: BoxConstraints(
+                              minWidth: constraints.maxWidth,
+                            ),
+                            child: SingleChildScrollView(
+                              child: Padding(
+                                padding: const EdgeInsets.all(16.0),
+                                child: DataTable(
+                                  headingRowColor: WidgetStateProperty.all(
+                                    Colors.grey[100],
+                                  ),
+                                  columnSpacing: isMobile ? 20 : 40,
+                                  columns: const [
+                                    DataColumn(label: Text('Name')),
+                                    DataColumn(label: Text('Role')),
+                                    DataColumn(label: Text('Actions')),
+                                  ],
+                                  rows: _filteredUsers.map((user) {
+                                    return DataRow(
+                                      cells: [
+                                        DataCell(Text(user.name)),
+                                        DataCell(
+                                          Chip(
+                                            label: Text(user.role),
+                                            backgroundColor: _getRoleColor(
+                                              user.role,
+                                            ),
+                                          ),
+                                        ),
+                                        DataCell(
+                                          Wrap(
+                                            alignment: WrapAlignment.center,
+                                            spacing: 4,
+                                            children: [
+                                              IconButton(
+                                                icon: const Icon(
+                                                  Icons.edit,
+                                                  size: 20,
+                                                ),
+                                                onPressed: () =>
+                                                    _showUserDialog(user: user),
+                                                tooltip: 'Edit',
+                                              ),
+                                              IconButton(
+                                                icon: const Icon(
+                                                  Icons.delete,
+                                                  size: 20,
+                                                  color: Colors.red,
+                                                ),
+                                                onPressed: () =>
+                                                    _confirmDelete(user),
+                                                tooltip: 'Delete',
+                                              ),
+                                            ],
+                                          ),
+                                        ),
+                                      ],
+                                    );
+                                  }).toList(),
+                                ),
+                              ),
+                            ),
+                          ),
+                        ),
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
   }

@@ -1,3 +1,4 @@
+import 'package:faculty_evaluation_app/presentation/evaluations_per_sem.dart';
 import 'package:flutter/material.dart';
 import 'package:faculty_evaluation_app/presentation/semester_trend_chart.dart';
 import 'package:faculty_evaluation_app/presentation/top_performing_faculty_card.dart';
@@ -17,6 +18,7 @@ class DataAnalyticsView extends StatelessWidget {
           const SizedBox(height: 20),
           SemesterTrendChart(),
           const SizedBox(height: 20),
+          EvaluationsPerSemesterCard(),
         ],
       ),
     );

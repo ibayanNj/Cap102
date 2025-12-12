@@ -251,58 +251,6 @@ class _SemesterTrendChartState extends State<SemesterTrendChart> {
     );
   }
 
-  // Widget _buildChart() {
-  //   final dataPointCount = _semesters.length;
-  //   final chartWidth = (dataPointCount * 150.0).clamp(500.0, double.infinity);
-
-  //   return SingleChildScrollView(
-  //     scrollDirection: Axis.horizontal,
-  //     child: SizedBox(
-  //       width: chartWidth,
-  //       height: 300,
-  //       child: LineChart(
-  //         LineChartData(
-  //           minY: 0.0,
-  //           maxY: 5.0,
-  //           minX: 0,
-  //           maxX: (dataPointCount - 1).toDouble() + 0.5,
-  //           lineTouchData: _buildLineTouchData(),
-  //           gridData: _buildGridData(),
-  //           titlesData: _buildTitlesData(),
-  //           borderData: FlBorderData(show: false),
-  //           lineBarsData: _buildLineBarsData(),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
-  // Widget _buildChart() {
-  //   final dataPointCount = _semesters.length;
-  //   final chartWidth = (dataPointCount * 150.0).clamp(500.0, double.infinity);
-
-  //   return SingleChildScrollView(
-  //     scrollDirection: Axis.horizontal,
-  //     child: SizedBox(
-  //       width: chartWidth,
-  //       height: 300,
-  //       child: LineChart(
-  //         LineChartData(
-  //           minY: 0.0,
-  //           maxY: 5.0,
-  //           minX: 0,
-  //           maxX: (dataPointCount - 1).toDouble(),
-  //           lineTouchData: _buildLineTouchData(),
-  //           gridData: _buildGridData(),
-  //           titlesData: _buildTitlesData(),
-  //           borderData: FlBorderData(show: false),
-  //           lineBarsData: _buildLineBarsData(),
-  //         ),
-  //       ),
-  //     ),
-  //   );
-  // }
-
   Widget _buildChart() {
     return LayoutBuilder(
       builder: (context, constraints) {
@@ -333,6 +281,8 @@ class _SemesterTrendChartState extends State<SemesterTrendChart> {
                 titlesData: _buildTitlesData(),
                 borderData: FlBorderData(show: false),
                 lineBarsData: _buildLineBarsData(),
+                // Added clipData to ensure nothing draws outside the chart area
+                clipData: FlClipData.all(),
               ),
             ),
           ),
@@ -345,6 +295,7 @@ class _SemesterTrendChartState extends State<SemesterTrendChart> {
     return LineTouchData(
       enabled: true,
       touchTooltipData: LineTouchTooltipData(
+        // tooltipBgColor: Colors.blueGrey, // Removed due to deprecation/custom implementation logic if needed
         tooltipBorder: const BorderSide(color: Colors.transparent),
         tooltipPadding: const EdgeInsets.symmetric(horizontal: 10, vertical: 6),
         getTooltipItems: (touchedSpots) {
@@ -489,7 +440,7 @@ class _SemesterTrendChartState extends State<SemesterTrendChart> {
       isStrokeCapRound: true,
       dotData: const FlDotData(show: true, getDotPainter: _getDotPainter),
       belowBarData: BarAreaData(show: false),
-      preventCurveOverShooting: false,
+      preventCurveOverShooting: true, // FIXED: Set this to true
       curveSmoothness: 0.35,
     );
   }
