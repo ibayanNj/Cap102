@@ -30,9 +30,7 @@ class CommentsGenerator {
     addFrom(classroomManagementCriteria);
 
     final double average = totalCriteria == 0 ? 0 : totalScore / totalCriteria;
-    final int rounded = average.round();
 
-    String overall = _getOverallComment(average);
     final List<String> strengths = [];
     final List<String> improvements = [];
 
@@ -50,106 +48,69 @@ class CommentsGenerator {
     collect(evaluationTechniquesCriteria);
     collect(classroomManagementCriteria);
 
-    // final String strengthsLine = strengths.isEmpty
-    //     ? ''
-    //     : 'Strengths include: ${strengths.take(4).join(', ')}.';
-    final String improvementsLine = improvements.isEmpty
-        ? ''
-        : 'Recommended focus areas: ${improvements.take(4).join(', ')}.';
-
-    return [
-      'Overall (${average.toStringAsFixed(2)}/5 → ${_getRatingLabel(rounded)}): $overall',
-      improvementsLine,
-    ].where((s) => s.isNotEmpty).join('\n\n');
-  }
-
-  static String _getOverallComment(double average) {
-    if (average >= 4.5) {
-      return 'Outstanding overall performance demonstrating exemplary teaching effectiveness and subject mastery.';
-    } else if (average >= 3.5) {
-      return 'Very satisfactory performance with strong teaching practice and consistent delivery.';
-    } else if (average >= 2.5) {
-      return 'Satisfactory performance meeting expectations, with opportunities for focused improvement.';
-    } else if (average >= 1.5) {
-      return 'Fair performance; targeted support and development are recommended in key areas.';
-    } else {
-      return 'Performance requires immediate attention; a structured improvement plan is advised.';
+    if (improvements.isEmpty) {
+      return 'All areas demonstrate satisfactory or above performance. Continue maintaining current teaching standards.';
     }
-  }
 
-  static String _getRatingLabel(int rating) {
-    switch (rating) {
-      case 5:
-        return 'Outstanding';
-      case 4:
-        return 'Very Satisfactory';
-      case 3:
-        return 'Satisfactory';
-      case 2:
-        return 'Fair';
-      case 1:
-        return 'Poor';
-      default:
-        return 'Not rated';
-    }
+    return improvements.take(4).join(', ');
   }
 
   static String _nameFor(String id) {
     switch (id) {
       case 'logical_presentation':
-        return 'logical lesson presentation';
+        return 'Enhance logical organization and sequencing of lesson content';
       case 'relates_to_issues':
-        return 'relating lessons to current issues';
+        return 'Strengthen connections between lessons and current real-world issues';
       case 'beyond_content':
-        return 'providing explanations beyond textbook content';
+        return 'Provide deeper explanations that extend beyond textbook material';
       case 'independent_teaching':
-        return 'independent teaching';
+        return 'Develop greater autonomy and confidence in independent teaching';
       case 'motivation_techniques':
-        return 'motivation techniques';
+        return 'Implement more varied and effective student motivation strategies';
       case 'links_past_present':
-        return 'linking past and present lessons';
+        return 'Improve integration of prior knowledge with new content';
       case 'varied_strategies':
-        return 'using varied strategies';
+        return 'Diversify instructional methods to accommodate different learning styles';
       case 'varied_questions':
-        return 'asking varied questions';
+        return 'Utilize a broader range of questioning techniques to promote critical thinking';
       case 'anticipates_difficulties':
-        return 'anticipating student difficulties';
+        return 'Better anticipate and address potential student learning challenges';
       case 'provides_reinforcement':
-        return 'providing reinforcement';
+        return 'Increase positive reinforcement and constructive feedback';
       case 'multiple_sources':
-        return 'using multiple sources';
+        return 'Incorporate diverse resources and materials beyond primary textbook';
       case 'encourages_speaking':
-        return 'encouraging student expression';
+        return 'Create more opportunities for student expression and participation';
       case 'integrates_values':
-        return 'integrating values into lessons';
+        return 'Strengthen integration of character development and values education';
       case 'free_expression':
-        return 'supporting free expression';
+        return 'Foster a more supportive environment for student voice and opinions';
       case 'well_modulated_voice':
-        return 'clear, well‑modulated voice';
+        return 'Improve voice projection, clarity, and modulation for better engagement';
       case 'appropriate_language':
-        return 'appropriate language for the class';
+        return 'Adjust language complexity to better match student comprehension levels';
       case 'correct_pronunciation':
-        return 'correct pronunciation';
+        return 'Focus on accurate pronunciation and enunciation';
       case 'correct_grammar':
-        return 'correct grammar';
+        return 'Ensure consistent use of proper grammar in verbal instruction';
       case 'listens_attentively':
-        return 'active listening';
+        return 'Demonstrate more active listening and responsiveness to student input';
       case 'evaluates_achievement':
-        return 'evaluating achievement based on the lesson';
+        return 'Align assessment practices more closely with learning objectives';
       case 'appropriate_assessment':
-        return 'appropriate assessment tools';
+        return 'Utilize assessment tools that better measure student understanding';
       case 'maintains_discipline':
-        return 'maintaining discipline';
+        return 'Strengthen classroom management and discipline strategies';
       case 'manages_time':
-        return 'time management';
+        return 'Improve time allocation and pacing throughout lessons';
       case 'maximizes_resources':
-        return 'maximizing resources';
+        return 'Make more efficient and creative use of available teaching resources';
       case 'good_rapport':
-        return 'good rapport with students';
+        return 'Build stronger professional relationships with students';
       case 'respects_limitations':
-        return 'respecting individual limitations';
+        return 'Show greater sensitivity to individual student needs and limitations';
       default:
-        return 'this area';
+        return 'Focus on professional development in this area';
     }
   }
 }

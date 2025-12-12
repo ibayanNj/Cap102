@@ -15,160 +15,144 @@ class FacultyDashboardPage extends StatelessWidget {
               'Welcome back, Professor!',
               style: TextStyle(fontSize: 24, fontWeight: FontWeight.bold),
             ),
-            const SizedBox(height: 20),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final bool isNarrow = constraints.maxWidth < 700;
-                if (isNarrow) {
-                  return Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      _buildStatCardBox(
-                        'Classes',
-                        '6',
-                        Icons.class_,
-                        Colors.blue,
-                      ),
-                      const SizedBox(height: 12),
-                      _buildStatCardBox(
-                        'Students',
-                        '180',
-                        Icons.people,
-                        Colors.green,
-                      ),
-                      const SizedBox(height: 12),
-                      _buildStatCardBox(
-                        'Rating',
-                        '4.8',
-                        Icons.star,
-                        Colors.orange,
-                      ),
-                    ],
-                  );
-                }
-                return Row(
-                  children: [
-                    const SizedBox(width: 20),
-                    _buildStatCard('Rating', '4.8', Icons.star, Colors.orange),
-                  ],
-                );
-              },
+            const SizedBox(height: 24),
+            const Text(
+              'Your Courses',
+              style: TextStyle(fontSize: 18, fontWeight: FontWeight.w600),
             ),
-            const SizedBox(height: 30),
-            LayoutBuilder(
-              builder: (context, constraints) {
-                final bool isNarrow = constraints.maxWidth < 700;
-                if (isNarrow) {
-                  return Column(
-                    children: [
-                      _buildUpcomingClassesCard(),
-                      const SizedBox(height: 20),
-                    ],
-                  );
-                }
-                return Row(
+            const SizedBox(height: 16),
+            _buildCourseCard(
+              context,
+              courseId: 'CC2109',
+              courseName: 'Intro to Computing',
+              schedule: 'MWF 9:00 AM - 10:30 AM',
+              status: 'Evaluated',
+              color: Colors.blue,
+            ),
+            const SizedBox(height: 12),
+            _buildCourseCard(
+              context,
+              courseId: 'CS3201',
+              courseName: 'Data Structures and Algorithms',
+              schedule: 'TTh 1:00 PM - 2:30 PM',
+              status: 'Evaluated',
+              color: Colors.green,
+            ),
+            const SizedBox(height: 12),
+            _buildCourseCard(
+              context,
+              courseId: 'CS4102',
+              courseName: 'Database Management Systems',
+              schedule: 'MWF 2:00 PM - 3:30 PM',
+              status: 'Evaluated',
+              color: Colors.orange,
+            ),
+            const SizedBox(height: 12),
+            _buildCourseCard(
+              context,
+              courseId: 'CS3305',
+              courseName: 'Web Development',
+              status: 'Evaluated',
+              schedule: 'TTh 10:00 AM - 11:30 AM',
+              color: Colors.purple,
+            ),
+            const SizedBox(height: 12),
+            _buildCourseCard(
+              context,
+              courseId: 'CS4208',
+              courseName: 'Software Engineering',
+              status: 'Evaluated',
+              schedule: 'MWF 11:00 AM - 12:30 PM',
+              color: Colors.teal,
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildCourseCard(
+    BuildContext context, {
+    required String courseId,
+    required String courseName,
+    required String schedule,
+    required String status,
+    required Color color,
+  }) {
+    return Card(
+      elevation: 2,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(12)),
+      child: InkWell(
+        onTap: () {
+          // Navigate to course details
+        },
+        borderRadius: BorderRadius.circular(12),
+        child: Padding(
+          padding: const EdgeInsets.all(16.0),
+          child: Row(
+            children: [
+              Container(
+                width: 4,
+                height: 80,
+                decoration: BoxDecoration(
+                  color: color,
+                  borderRadius: BorderRadius.circular(2),
+                ),
+              ),
+              const SizedBox(width: 16),
+              Expanded(
+                child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Expanded(child: _buildUpcomingClassesCard()),
-                    const SizedBox(width: 20),
+                    Text(
+                      courseId,
+                      style: TextStyle(
+                        fontSize: 14,
+                        fontWeight: FontWeight.w600,
+                        color: color,
+                      ),
+                    ),
+                    const SizedBox(height: 4),
+                    Text(
+                      courseName,
+                      style: const TextStyle(
+                        fontSize: 18,
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                    Text(
+                      status,
+                      style: const TextStyle(
+                        fontSize: 13,
+                        fontWeight: FontWeight.bold,
+                        color: Colors.green,
+                      ),
+                    ),
+                    const SizedBox(height: 8),
+                    Row(
+                      children: [
+                        Icon(Icons.people, size: 16, color: Colors.grey[600]),
+                        const SizedBox(width: 16),
+                        Icon(Icons.schedule, size: 16, color: Colors.grey[600]),
+                        const SizedBox(width: 4),
+                        Expanded(
+                          child: Text(
+                            schedule,
+                            style: TextStyle(
+                              fontSize: 14,
+                              color: Colors.grey[600],
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
                   ],
-                );
-              },
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatCardBox(
-    String title,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Row(
-          children: [
-            Icon(icon, size: 40, color: color),
-            const SizedBox(width: 15),
-            Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  value,
-                  style: const TextStyle(
-                    fontSize: 24,
-                    fontWeight: FontWeight.bold,
-                  ),
                 ),
-                Text(title, style: TextStyle(color: Colors.grey[600])),
-              ],
-            ),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildStatCard(
-    String title,
-    String value,
-    IconData icon,
-    Color color,
-  ) {
-    return Expanded(child: _buildStatCardBox(title, value, icon, color));
-  }
-
-  Widget _buildUpcomingClassesCard() {
-    return Card(
-      child: Padding(
-        padding: const EdgeInsets.all(16.0),
-        child: Column(
-          crossAxisAlignment: CrossAxisAlignment.start,
-          children: [
-            const Text(
-              'Today\'s Classes',
-              style: TextStyle(fontSize: 18, fontWeight: FontWeight.bold),
-            ),
-            const SizedBox(height: 15),
-            _buildClassItem(
-              'CS 101 - Introduction to Programming',
-              '9:00 AM - 10:30 AM',
-            ),
-            _buildClassItem('CS 201 - Data Structures', '2:00 PM - 3:30 PM'),
-            _buildClassItem('CS 301 - Database Systems', '4:00 PM - 5:30 PM'),
-          ],
-        ),
-      ),
-    );
-  }
-
-  Widget _buildClassItem(String className, String time) {
-    return Padding(
-      padding: const EdgeInsets.symmetric(vertical: 8.0),
-      child: Row(
-        children: [
-          const Icon(Icons.access_time, size: 16, color: Colors.blue),
-          const SizedBox(width: 10),
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                Text(
-                  className,
-                  style: const TextStyle(fontWeight: FontWeight.w500),
-                ),
-                Text(
-                  time,
-                  style: TextStyle(color: Colors.grey[600], fontSize: 12),
-                ),
-              ],
-            ),
+              ),
+              Icon(Icons.arrow_forward_ios, size: 16, color: Colors.grey[400]),
+            ],
           ),
-        ],
+        ),
       ),
     );
   }
